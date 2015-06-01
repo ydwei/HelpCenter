@@ -46,6 +46,12 @@ public class Operation {
 	
 	public String toString()
 	{
+		return this.name;
+	}
+	
+	public String toString1()
+	{
+		
 		StringBuilder buffer = new StringBuilder();
 		
 		

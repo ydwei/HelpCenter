@@ -44,17 +44,17 @@ public class TestTree {
 		
 		for(Operation operation:operations)
 		{
-			System.out.println("===========================\n"+operation);
+			System.out.println(operation+"\n===========================");
 		}
 		
 		PathFinder.createPaths(operations);
 		PathFinder.printAllPaths();
 		
-		TestFrame frame = new TestFrame(otree);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		frame.setExtendedState( JFrame.MAXIMIZED_BOTH );
-		
-		frame.setVisible(true);  
+//		TestFrame frame = new TestFrame(otree);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+//		frame.setExtendedState( JFrame.MAXIMIZED_BOTH );
+//		
+//		frame.setVisible(true);  
 	}
 	
 	public ArrayList<Operation> getOperations()
