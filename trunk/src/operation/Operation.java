@@ -2,7 +2,7 @@ package operation;
 
 import java.util.ArrayList;
 
-public class Operation {
+public class Operation implements PathNode{
 	private String name="unset";
 	private ArrayList<IBusinessData> requirements = new ArrayList<IBusinessData>();
 	private ArrayList<IBusinessData> products = new ArrayList<IBusinessData>();

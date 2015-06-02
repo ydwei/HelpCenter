@@ -15,13 +15,15 @@ import operationpath.PathFinder;
 
 public class TestTree {
 	
-	//创建三条业务数据
-	private TextBusinessData outTradeNo = new TextBusinessData("outTradeNo");
-	private TextBusinessData tradeNo = new TextBusinessData("tradeNo");
-	private TextBusinessData price = new TextBusinessData("price");	
+	//创建业务数据
+	private static TextBusinessData partnerId = new TextBusinessData("partnerId");
+	private static TextBusinessData outTradeNo = new TextBusinessData("outTradeNo");
+	private static TextBusinessData tradeNo = new TextBusinessData("tradeNo");
+	private static TextBusinessData price = new TextBusinessData("price");	
 
 	private ArrayList<TextBusinessData> datas = new ArrayList<TextBusinessData>()
 	{{
+		add(partnerId);
 		add(outTradeNo);
 		add(tradeNo);
 		add(price);
@@ -32,6 +34,7 @@ public class TestTree {
 	private ArrayList<Operation> operations = new ArrayList<Operation>()
 	{{
 		add(createGetTradeNo());
+		add(createGetPID());
 		add(createGetPriceWithTradeNo());
 		add(createGetPriceWithBops());
 	}};
@@ -48,7 +51,14 @@ public class TestTree {
 		}
 		
 		PathFinder.createPaths(operations);
-		PathFinder.printAllPaths();
+		PathFinder.printAllPaths(PathFinder.getPaths());
+		
+		//按照条件查找路径 
+		ArrayList<TextBusinessData> from = new ArrayList<TextBusinessData> ();
+		from.add(partnerId);
+		TextBusinessData to = price;
+		PathFinder.printAllPaths(PathFinder.findPaths(from, to));
+		
 		
 //		TestFrame frame = new TestFrame(otree);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
@@ -74,12 +84,28 @@ public class TestTree {
 		getTradeNo.setName("OutTradeNo2TradeNo");
 		
 		getTradeNo.getRequirements().add(outTradeNo);
+		getTradeNo.getRequirements().add(partnerId);
 		getTradeNo.getProducts().add(tradeNo);
 		
-		getTradeNo.setGuidance(new TextGuidance("grep outtradeno tradecore"));
+		getTradeNo.setGuidance(new TextGuidance("grep outtradeno from tradecore"));
 		getTradeNo.setPriority(PriorityEnum.REGULAR);
 		
 		return getTradeNo;
+	}
+	
+	public Operation createGetPID()
+	{
+		Operation getPID = new Operation();
+		
+		getPID.setName("tradeNo2PID");
+		
+		getPID.getRequirements().add(tradeNo);
+		getPID.getProducts().add(partnerId);
+		
+		getPID.setGuidance(new TextGuidance("grep pid from tradecore"));
+		getPID.setPriority(PriorityEnum.REGULAR);
+		
+		return getPID;
 	}
 	
 	public Operation createGetPriceWithTradeNo()
@@ -91,7 +117,7 @@ public class TestTree {
 		getPrice.getRequirements().add(tradeNo);
 		getPrice.getProducts().add(price);
 		
-		getPrice.setGuidance(new TextGuidance("grep tradeno paycore"));
+		getPrice.setGuidance(new TextGuidance("grep tradeno from paycore"));
 		getPrice.setPriority(PriorityEnum.REGULAR);
 		
 		return getPrice;

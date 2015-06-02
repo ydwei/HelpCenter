@@ -1,5 +1,5 @@
 package operation;
 
-public interface IBusinessData {
+public interface IBusinessData extends PathNode{
 
 }
