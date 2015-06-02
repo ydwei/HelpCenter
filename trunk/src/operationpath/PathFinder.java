@@ -82,19 +82,102 @@ public class PathFinder {
 		return newPath;
 	}
 	
-	public static ArrayList<LinkedList<PathNode>> findPaths(ArrayList<TextBusinessData> from,IBusinessData to)
+	public static ArrayList<LinkedList<PathNode>> findPaths(ArrayList<IBusinessData> from,IBusinessData to)
 	{
+		//所有可以确定获得的数据集合
+		ArrayList<IBusinessData> reacherable = new ArrayList<IBusinessData>();
+		reacherable.addAll(from);
+		
+		//将所有可能的路径放入运行堆栈中，等待处理
+		Stack<LinkedList<PathNode>> runningPath =new Stack<LinkedList<PathNode>>();
+		runningPath.addAll(getPossiblePath(from,to));
+		
 		ArrayList<LinkedList<PathNode>> result = new ArrayList<LinkedList<PathNode>>();
 		
-		for(TextBusinessData data:from)
+		while(!runningPath.isEmpty())
 		{
+			Stack<LinkedList<PathNode>> tempStack =new Stack<LinkedList<PathNode>>();
+			
+			LinkedList<PathNode> path = runningPath.pop();
+			boolean hasNewInfo = false;
+			
+			for(int index=0;index<path.size();index++)
+			{
+				PathNode currentNode = path.get(index);
+				if(currentNode instanceof IBusinessData)
+				{
+					if(reacherable.contains(currentNode))
+					{
+						continue;
+					}
+					reacherable.add((IBusinessData)currentNode);
+					hasNewInfo=true;
+					continue;
+				}
+				else if(currentNode instanceof Operation)
+				{
+					if(matchRequirement((Operation)currentNode,reacherable))
+					{
+						continue;
+					}
+					else
+					{
+						tempStack.push(path);
+						break;
+					}
+				}
+			}
+			
+			if(!tempStack.contains(path))
+			{
+				result.add(path);
+			}
+			
+			if(runningPath.isEmpty())
+			{
+				if(hasNewInfo)
+				{
+					runningPath=tempStack;
+					continue;
+				}
+				
+				break;
+			}
 			
 		}
 		
 		return result;
 	}
 	
+	private static boolean matchRequirement(Operation operation,ArrayList<IBusinessData> reacherable)
+	{
+		for(IBusinessData data:operation.getRequirements())
+		{
+			if(!reacherable.contains(data))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	
+	private static ArrayList<LinkedList<PathNode>> getPossiblePath(ArrayList<IBusinessData> from,IBusinessData to)
+	{
+		ArrayList<LinkedList<PathNode>> result = new ArrayList<LinkedList<PathNode>>();
+		
+		for(IBusinessData node:from)
+		{
+			for(LinkedList<PathNode> path : paths)
+			{
+				if(path.getFirst().equals(node) && path.getLast().equals(to))
+				{
+					result.add(path);
+				}
+			}
+		}
+		
+		return result;
+	}
 	
 	public static ArrayList<LinkedList<PathNode>> getPaths()
 	{

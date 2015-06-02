@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import javax.swing.JFrame;
 
+import operation.IBusinessData;
 import operation.Operation;
 import operation.PriorityEnum;
 import operation.businessdata.TextBusinessData;
@@ -54,9 +55,12 @@ public class TestTree {
 		PathFinder.printAllPaths(PathFinder.getPaths());
 		
 		//按照条件查找路径 
-		ArrayList<TextBusinessData> from = new ArrayList<TextBusinessData> ();
+		ArrayList<IBusinessData> from = new ArrayList<IBusinessData> ();
 		from.add(partnerId);
+		from.add(outTradeNo);
+		from.add(tradeNo);
 		TextBusinessData to = price;
+		System.out.println(" --- find ---");
 		PathFinder.printAllPaths(PathFinder.findPaths(from, to));
 		
 		
