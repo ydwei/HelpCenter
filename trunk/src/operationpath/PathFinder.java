@@ -90,16 +90,23 @@ public class PathFinder {
 		
 		//将所有可能的路径放入运行堆栈中，等待处理
 		Stack<LinkedList<PathNode>> runningPath =new Stack<LinkedList<PathNode>>();
-		runningPath.addAll(getPossiblePath(from,to));
+		ArrayList<LinkedList<PathNode>> possible = getPossiblePath(from,to);
+		runningPath.addAll(possible);
+		System.out.println(" ---- all possible ---");
+		printAllPaths(possible);
 		
 		ArrayList<LinkedList<PathNode>> result = new ArrayList<LinkedList<PathNode>>();
 		
+		boolean hasNewInfo = false;
+		Stack<LinkedList<PathNode>> tempStack =new Stack<LinkedList<PathNode>>();
+		
 		while(!runningPath.isEmpty())
 		{
-			Stack<LinkedList<PathNode>> tempStack =new Stack<LinkedList<PathNode>>();
 			
 			LinkedList<PathNode> path = runningPath.pop();
-			boolean hasNewInfo = false;
+			
+			
+			System.out.println("Pasering:"+pathToString(path));
 			
 			for(int index=0;index<path.size();index++)
 			{
@@ -123,6 +130,7 @@ public class PathFinder {
 					else
 					{
 						tempStack.push(path);
+						System.out.println("puushback:"+pathToString(path));
 						break;
 					}
 				}
@@ -131,13 +139,17 @@ public class PathFinder {
 			if(!tempStack.contains(path))
 			{
 				result.add(path);
+				System.out.println("add to result:"+pathToString(path));
 			}
 			
 			if(runningPath.isEmpty())
 			{
 				if(hasNewInfo)
 				{
-					runningPath=tempStack;
+					runningPath.addAll(tempStack);
+					tempStack.removeAllElements();
+					hasNewInfo = false;
+					
 					continue;
 				}
 				
@@ -206,6 +218,25 @@ public class PathFinder {
 				System.out.print(" => "+node);
 			}
 		}
+	}
+	
+	public static String pathToString(LinkedList<PathNode> path)
+	{
+		StringBuilder str = new StringBuilder();
+		
+		for(PathNode node:path)
+		{
+			if(node instanceof Operation)
+			{
+				str.append(" => ["+node+"]");
+			}
+			else
+			{
+				str.append(" => "+node);
+			}
+		}
+		
+		return str.toString();
 	}
 }
 
