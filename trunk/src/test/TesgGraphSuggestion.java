@@ -2,16 +2,14 @@ package test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import operation.IBusinessData;
 import operation.Operation;
-import operation.PathNode;
 import operation.PriorityEnum;
 import operation.businessdata.TextBusinessData;
 import operationpath.PathFinder;
 
-public class TestGraph {
+public class TesgGraphSuggestion {
 
 	public static void main(String[] args) {
 		String dataNames[] = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
@@ -74,23 +72,7 @@ public class TestGraph {
 
 		PathFinder.createPaths(operationLists);		 
 		PathFinder.printAllPaths(PathFinder.getPaths());
-		
-		//按照条件查找路径 
-		ArrayList<IBusinessData> from = new ArrayList<IBusinessData> ();
-		from.add(datas.get("E"));
-		from.add(datas.get("A"));
-		IBusinessData to = datas.get("N");				
-		
-		ArrayList<LinkedList<PathNode>> paths = PathFinder.findPaths(from, to);
-		
-		System.out.println(" --- find ---");
-		PathFinder.printAllPaths(paths);
-	
-		
-		//按照条件查找路径 	
-		System.out.println(" --- all path to N ---");
-		PathFinder.printAllPaths(PathFinder.findPaths(datas.get("N")));
-				
+
 	}
-	
+
 }

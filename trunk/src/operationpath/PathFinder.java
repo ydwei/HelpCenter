@@ -82,6 +82,7 @@ public class PathFinder {
 		return newPath;
 	}
 	
+	//通过已知条件和目的地求可用路径
 	public static ArrayList<LinkedList<PathNode>> findPaths(ArrayList<IBusinessData> from,IBusinessData to)
 	{
 		//所有可以确定获得的数据集合
@@ -160,6 +161,23 @@ public class PathFinder {
 		
 		return result;
 	}
+	
+	//根据目的地求所有可用路径
+	public static ArrayList<LinkedList<PathNode>> findPaths(IBusinessData to)
+	{
+		ArrayList<LinkedList<PathNode>> result = new ArrayList<LinkedList<PathNode>>();
+		
+		for(LinkedList<PathNode> path : paths)
+		{
+			if(path.getLast().equals(to))
+			{
+				result.add(path);
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	private static boolean matchRequirement(Operation operation,ArrayList<IBusinessData> reacherable)
 	{
